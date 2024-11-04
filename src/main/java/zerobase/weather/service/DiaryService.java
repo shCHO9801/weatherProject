@@ -1,5 +1,6 @@
 package zerobase.weather.service;
 
+import io.swagger.annotations.ApiOperation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
