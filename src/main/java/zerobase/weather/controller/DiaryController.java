@@ -49,6 +49,17 @@ public class DiaryController {
     * - startDate, endDate parameter 로 조회할 날짜 기간의 시작일/종료일을 받아주세요.
     * - 해당 기간의 일기를 List 형태로 반환해주세요.
     */
+    @GetMapping("read/diaries")
+    List<Diary> readDiaries(
+        @RequestParam
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate startDate,
+        @RequestParam
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate endDate
+    ){
+        return diaryService.readDiaries(startDate, endDate);
+    }
 
     /*
     * PUT / update / diary
