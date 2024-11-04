@@ -48,6 +48,16 @@ public class DiaryService {
         return diaryRepository.findAllByDate(date);
     }
 
+    public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
+        return diaryRepository.findAllByDateBetween(startDate, endDate);
+    }
+
+    public void updateDiary(LocalDate date, String text) {
+        Diary nowDiary = diaryRepository.getFirstBy(date);
+        nowDiary.setText(text);
+        diaryRepository.save(nowDiary);
+    }
+
     private String getWeatherString() {
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=seoul&appid=" + apiKey;
 
@@ -78,9 +88,7 @@ public class DiaryService {
         }
     }
 
-    public List<Diary> readDiaries(LocalDate startDate, LocalDate endDate) {
-        return diaryRepository.findAllByDateBetween(startDate, endDate);
-    }
+
 
     private Map<String, Object> parseWeather(String jsonString) {
         JSONParser jsonParser = new JSONParser();

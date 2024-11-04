@@ -67,6 +67,15 @@ public class DiaryController {
     * - text parameter 로 수정할 새 일기 글을 받아주세요.
     * - 해당 날짜의 첫번째 일기 글을 새로 받아온 일기글로 수정해주세요.
     */
+    @PutMapping("/update/diary")
+    void updateDiary(
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate date,
+            @RequestBody String text
+    ){
+        diaryService.updateDiary(date, text);
+    }
 
     /*
     * DELETE / delete / diary
