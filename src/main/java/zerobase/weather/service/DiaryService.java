@@ -4,6 +4,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,12 @@ import java.util.Map;
 
 @Service
 public class DiaryService {
+    private final Logger logger = LoggerFactory.getLogger(DiaryService.class);
     private final DateWeatherRepository dateWeatherRepository;
+    private final DiaryRepository diaryRepository;
+
     @Value("${openweathermap.key}")
     private String apiKey;
-    private final DiaryRepository diaryRepository;
 
     public DiaryService(DiaryRepository diaryRepository,
                         DateWeatherRepository dateWeatherRepository) {
@@ -39,6 +43,7 @@ public class DiaryService {
     @Transactional
     @Scheduled(cron = "0 0 1 * * *")
     public void saveWeatherDate() {
+        logger.info("Saving weather data");
         dateWeatherRepository.save(getWeatherFromApi());
     }
 
@@ -46,6 +51,7 @@ public class DiaryService {
     // 최고 수준 격리 설정으로 데이터 일관성 강화
     public void createDiary(LocalDate date, String text) {
         // 날씨 데이터 조회 또는 API 호출
+        logger.info("started to Creating diary");
         DateWeather dateWeather = getDateWeather(date);
 
         Diary nowDiary = new Diary();
@@ -53,6 +59,7 @@ public class DiaryService {
         nowDiary.setText(text);
 
         diaryRepository.save(nowDiary);
+        logger.info("end to Creating Diary");
     }
 
     private DateWeather getDateWeather(LocalDate date) {
