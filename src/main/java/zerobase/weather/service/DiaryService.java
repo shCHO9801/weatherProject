@@ -6,6 +6,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.domain.Diary;
 import zerobase.weather.repository.DiaryRepository;
 
@@ -14,7 +16,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class DiaryService {
         this.diaryRepository = diaryRepository;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)  // 최고 수준 격리 설정으로 데이터 일관성 강화
     public void createDiary(LocalDate date, String text) {
         String weatherData = getWeatherString();
 
@@ -44,6 +46,8 @@ public class DiaryService {
         diaryRepository.save(nowDiary);
     }
 
+
+    @Transactional(readOnly = true)
     public List<Diary> readDiary(LocalDate date) {
         return diaryRepository.findAllByDate(date);
     }
@@ -81,7 +85,7 @@ public class DiaryService {
             String inputLine;
             StringBuilder response = new StringBuilder();
 
-            while( (inputLine = br.readLine()) != null) {
+            while ((inputLine = br.readLine()) != null) {
                 response.append(inputLine);
             }
             br.close();
@@ -91,7 +95,6 @@ public class DiaryService {
             return "failed to get response";
         }
     }
-
 
 
     private Map<String, Object> parseWeather(String jsonString) {
@@ -114,7 +117,6 @@ public class DiaryService {
         resultMap.put("icon", weatherData.get("icon"));
         return resultMap;
     }
-
 
 
 }
