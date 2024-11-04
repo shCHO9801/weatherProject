@@ -1,6 +1,5 @@
 package zerobase.weather.service;
 
-import io.swagger.annotations.ApiOperation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,7 +76,7 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<Diary> readDiary(LocalDate date) {
-        if(date.isAfter(LocalDate.ofYearDay(3050, 1))) {
+        if (date.isAfter(LocalDate.ofYearDay(3050, 1))) {
             throw new InvalidDate();
         }
         return diaryRepository.findAllByDate(date);
