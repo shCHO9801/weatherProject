@@ -82,5 +82,13 @@ public class DiaryController {
     * - date parameter 로 삭제할 날짜를 받아주세요.
     * - 해당 날짜의 모든 일기를 지워주세요.
     */
+    @DeleteMapping("/delete/diary")
+    void deleteDiary(
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate date
+    ){
+        diaryService.deleteDiary(date);
+    }
 
 }
