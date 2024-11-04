@@ -53,7 +53,7 @@ public class DiaryService {
     }
 
     public void updateDiary(LocalDate date, String text) {
-        Diary nowDiary = diaryRepository.getFirstBy(date);
+        Diary nowDiary = diaryRepository.getFirstByDate(date);
         nowDiary.setText(text);
         diaryRepository.save(nowDiary);
     }
